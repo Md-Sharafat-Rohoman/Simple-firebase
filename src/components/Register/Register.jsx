@@ -1,6 +1,14 @@
-import React from 'react';
+import React, { use, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { AuthContext } from '../../context/AuthContext';
 
 const Register = () => {
+    const [errorMessage, setErrorMessage] = useState('');
+    const [success, setSuccess] = useState('');
+
+    const {createUser} = use(AuthContext)
+    // console.log(createUser)
+    const navigate = useNavigate();
 
 
     const handleRegister = e => {
@@ -10,6 +18,20 @@ const Register = () => {
         const email = e.target.email.value;
         const password = e.target.password.value;
         console.log(name, email, password);
+
+        createUser(email, password)
+        .then(result =>{
+            console.log(result.user)
+            setSuccess('Account successfully')
+            navigate('/')
+        })
+        .catch(error =>{
+            console.log(error);
+            setErrorMessage(error)
+
+        })
+
+        
     }
     return (
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl mx-auto">
@@ -25,7 +47,15 @@ const Register = () => {
                     <div><a className="link link-hover">Forgot password?</a></div>
                     <button className="btn btn-neutral mt-4">Register</button>
                 </form>
+                <p>Already have an account . Please <Link className='text-green-500' to={'/login'}>Login</Link></p>
+                {
+                    <p className='text-red-500'>{errorMessage}</p>
+                }
+                {
+                    <p className='text-green-400'>{success}</p>
+                }
             </div>
+
         </div>
     );
 };
