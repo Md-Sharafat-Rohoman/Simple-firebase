@@ -9,7 +9,7 @@ const PriveteRouter = ({children}) => {
     console.log(location)
 
     if(!user){
-        return <Navigate to={'/login'}></Navigate>
+        return <Navigate state={location?.pathname} to={'/login'}></Navigate>
     }
     if(loading){
         return <span className="loading loading-spinner loading-xl"></span>
